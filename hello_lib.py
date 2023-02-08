@@ -355,7 +355,69 @@ def fnc_senddata_to_googlesheet(df , googlesheet_url, sheet_name, column_list, s
     
     
     
+
     
+    
+
+def fnc_senddata_to_googlesheet_change_startrow(df , googlesheet_url, sheet_name, column_list, sheet_range, change_startrow):
+
+#     !ls drive
+#     !pip install pydrive
+#     !pip install xlsxwriter
+    import pandas as pd
+
+    #add column
+    if (len(column_list)>0):
+        df = df[column_list]
+        
+
+    # these classes allow you to request the Google drive API
+    from pydrive.auth import GoogleAuth
+    from pydrive.drive import GoogleDrive 
+    from google.colab import auth 
+    from oauth2client.client import GoogleCredentials
+
+    auth.authenticate_user()
+    gauth = GoogleAuth()
+    gauth.credentials = GoogleCredentials.get_application_default()
+    drive = GoogleDrive(gauth)
+
+    #สำหรับจัดการ Google sheet
+    import gspread
+    from gspread_dataframe import set_with_dataframe
+    from gspread_dataframe import get_as_dataframe
+
+
+    from google.auth import default
+    creds, _ = default()
+
+    gc = gspread.authorize(creds)
+    # gc = gspread.authorize(GoogleCredentials.get_application_default())
+    #สำหรับจัดการ Google sheet---------------------------------
+
+
+    
+    
+    
+    
+    #wb2 = gc.open_by_url('https://docs.google.com/spreadsheets/d/{}/edit#gid=0'.format(val_4_2))
+    wb2 = gc.open_by_url(googlesheet_url)
+
+    
+    
+    try:
+            sheet1 = wb2.worksheet(sheet_name)
+#             wb2.del_worksheet(sheet1)
+
+#             worksheet1 = wb2.add_worksheet(title=sheet_name, rows="100", cols="20")
+    except:
+            worksheet1 = wb2.add_worksheet(title=sheet_name, rows="100", cols="20")
+    
+    
+    #worksheet1 เสมือน sheet_destination_sheet
+    sheet_destination_sheet = wb2.worksheet(sheet_name)
+    wb2.values_clear("'{}'!{}".format(sheet_name,sheet_range))
+    set_with_dataframe(sheet_destination_sheet, df, row=change_startrow, include_column_header=True) 
     
     
     
