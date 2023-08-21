@@ -1,5 +1,5 @@
 class clssAccessWebsite():
-    base_url = "https://xxxxxxx"
+    base_url = "https://xxxxxx"
     
     def setUp(self):
         self.driver = webdriver.Chrome(ChromeDriverManager().install())
